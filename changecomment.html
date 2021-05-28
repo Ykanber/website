@@ -1,0 +1,46 @@
+{% extends "layoutforstudent.html" %}
+{% block title %} Student  Page {% endblock %}
+{% block content %}
+
+<div class="box">
+    <article class="media">
+      <div class="media-content">
+        <form action="/changecomment1" method="post" name="commentteacher" >
+          <div class="field">
+             <p class="control">
+               <textarea class="textarea" name="comment_text" required="required" placeholder="Add a comment..."></textarea>
+             </p>
+          </div>
+          <p>Rating</p>
+          <nav class="level">
+            <div class="level-left">
+              <div class="level-item">
+                <div class="select">          
+                  <select name="rating" required="required">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6" >6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="level-right">
+              <div class="level-item">
+                <button class="button is-info" name="T_username" value="{{ T_username }}">Create Comment</button>
+              </div>
+            </div>
+          </nav>
+        </form>
+      </div>
+    </article>
+  </div>
+
+  {% endblock %}

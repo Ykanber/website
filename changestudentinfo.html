@@ -1,0 +1,41 @@
+{% extends "layoutforstudent.html" %}
+{% block title %} Student  Information change Page {% endblock %}
+{% block content %}
+<form method="POST" action="/changestudentinfo">  
+    <div class="field">
+        <label for="Name" class="label">Name</label>
+        <div class="control">
+          <input type="text" name="name" class="input" maxlength="20" required="required"/>
+        </div>
+    </div>
+    <div class="field">
+        <label for="Surname" class="label">Surname</label>
+        <div class="control">
+          <input type="text" name="surname" class="input" maxlength="20" required="required"/>
+        </div>
+    </div>
+    <div class="field">
+        <label for="Age" class="label">Age</label>
+        <div class="control">
+          <input type="number" name="age" class="input" min="10" max="85" required="required"/>
+        </div>
+    </div>
+    <div class="field">
+      <label for="gender" class="label">Gender</label>
+      <div class="control">
+        <input type="radio" name="gender" value="Male" required="required"/>
+        <label for="Male">Male</label><br>
+        <input type="radio" name="gender"  value="Female" required="required"/>
+        <label for="Female ">Female </label><br>
+      </div>
+  </div>
+    <div class="field">
+        <label for="Password" class="label">Password</label>
+        <div class="control">
+          <input type="password" name="password" class="input" maxlength="20" required="required"/>
+        </div>
+    </div>
+    <input type="submit"/>
+</form>
+
+{% endblock %}

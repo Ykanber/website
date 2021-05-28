@@ -1,0 +1,91 @@
+{% extends "layoutforteacher.html" %}
+{% block title %} Teacher Stats Page {% endblock %}
+{% block content %}
+
+
+<nav class ="level">
+    <div class ="level-item">
+        <p>
+            <strong>Count and teacher rating average Grouped by lesson </strong> 
+        </p>
+    </div>
+</nav>
+    
+{% if lesson_stats[0] %}
+<div class="box">
+<table class="table is-striped is-fullwidth">
+    <tr>
+      <td>   
+        Teacher Count
+      </td>
+      <td>   
+       Average  
+      </td>
+      <td>   
+         Lesson Type 
+      </td>
+    </tr>
+    {% for Lstats in lesson_stats %}    
+    <tr>    
+      <td>
+        {{ Lstats.count }}
+      </td>
+      <td>   
+        {{ Lstats.average }} 
+      </td>
+      <td>   
+        {{ Lstats.lesson_type }}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>       
+</div>
+{% endif %}
+
+<nav class ="level">
+    <div class ="level-item">
+        <p>
+            <strong>Teachers ordered by student count </strong> 
+        </p>
+    </div>
+</nav>
+
+{% if teacher_stats[0] %}
+<div class="box">
+<table class="table is-striped is-fullwidth">
+    <tr>
+      <td>   
+        Student Count
+      </td>
+      <td>   
+       Average  
+      </td>
+      <td>   
+         Name  
+      </td>
+      <td>   
+        Surname  
+     </td>
+    </tr>
+    {% for Rstats in teacher_stats %}    
+    <tr>    
+      <td>
+        {{ Rstats.count }}
+      </td>
+      <td>   
+        {{ Rstats.average }} 
+      </td>
+      <td>   
+        {{ Rstats.name }}
+      </td>
+      <td>   
+        {{ Rstats.surname }}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>       
+</div>
+{% endif %}
+
+
+{% endblock %}

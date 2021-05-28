@@ -1,0 +1,78 @@
+{% extends "layoutforteacher.html" %}
+{% block title %} Student  Page {% endblock %}
+{% block content %}
+
+<div class = "box">
+  <article class="media">
+    <figure class="media-left">
+      <p class="image is-64x64">
+        <img src="{{url_for('static',filename='images/128x128.png')}}">
+      </p>
+    </figure>
+    <div class="media-content">
+        <div class="content">
+          <div class="table-container">
+            <table class="table-is-bordered" >
+              <tr>
+                <td>Name</td>
+                <td>{{ arr[1] }}</td>
+              </tr>
+              <tr>
+                <td>Surname</td>
+                <td>{{ arr[2] }}</td>
+              </tr>
+              <tr>
+                <td>Age</td>
+                <td>{{ arr[3] }}</td>
+              </tr>
+              <tr>
+                <td>Gender</td>
+                <td>{{ arr[4] }}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+    </div>
+  </article>
+</div>
+
+  {% if teachers[0] %}
+  <div class="box">
+    <nav class="level">
+      <div class="level-item">
+        <strong>
+          Teachers of the student
+        </strong>
+      </div>
+    </nav>
+    <table class="table is-striped is-fullwidth is-hoverable">
+      <tr>
+        <td>   
+          Name
+        </td>
+        <td>   
+         Surname  
+        </td>
+        <td>   
+          Teacher Profile 
+        </td>
+      </tr>
+      {% for Teaching in teachers %}    
+      <tr>    
+        <td>
+          {{ Teaching.T_Name }} 
+        </td>
+        <td>   
+           {{ Teaching.T_Surname }}
+        </td>
+       <td>   
+         <a href="{{ url_for('teacherpage', T_username = Teaching.T_username)}}"> 
+          Teacher Page 
+          </a>
+        </td>  
+      </tr>
+      {% endfor %}
+      </table>
+    </div>
+  {% endif %}
+{% endblock %}

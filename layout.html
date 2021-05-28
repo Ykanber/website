@@ -1,0 +1,20 @@
+<html>
+    <head>
+        <title> Private Teaching {% block title %}{% endblock %} </title>
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'website.css')}}">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    </head>
+    <body>
+        <header>
+            <div class="navbar-brand">
+                <span class="navbar-item">
+                  <a class="button is-link" href="{{ url_for('home_page') }}">Home</a>
+                </span>
+              </div>
+        </header>
+        {% block content %}{% endblock %}      
+    <footer>
+        <small> &copy 2020 Yavuz</small>
+    </footer> 
+    </body>
+</html>

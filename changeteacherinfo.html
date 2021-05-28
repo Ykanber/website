@@ -1,0 +1,44 @@
+{% extends "layoutforteacher.html" %}
+{% block title %} Teacher Information Change Page {% endblock %}
+{% block content%}  
+<form method="POST" action="/changeteacherinfo">
+    <div class="field">
+        <label for="Name" class="label">Name</label>
+        <div class="control">
+          <input type="text" name="name" class="input" maxlength="20" required="required"/>
+        </div>
+    </div>
+    <div class="field">
+        <label for="Surname" class="label">Surname</label>
+        <div class="control">
+          <input type="text" name="surname" class="input" maxlength="20" required="required"/>
+        </div>
+    </div>
+    <div class="field">
+        <label for="Age" class="label">Age</label>
+        <div class="control">
+          <input type="number" name="age" class="input" min="18" max="85" required="required"/>
+        </div>
+    </div>
+    <div class="field">
+        <label for="Lesson_type" class="label">Lesson Type</label>
+        <div class="control">
+          <input type="radio" id="physics" name="lesson_type" value="physics">
+          <label for="physics">Physics</label><br>
+          <input type="radio" id="math " name="lesson_type" value="math">
+          <label for="math ">Math </label><br>
+          <input type="radio" id="chemistry" name="lesson_type" value="chemistry">
+          <label for="chemistry">Chemistry</label><br><br>
+        </div>
+    </div>
+    <div class="field">
+        <label for="Password" class="label">Password</label>
+        <div class="control">
+          <input type="password" name="password" class="input" maxlength="20" required="required"/>
+        </div>
+    </div>
+    <input type="submit"/>
+</form>
+
+
+{% endblock %}

@@ -1,0 +1,134 @@
+{% extends "layoutforstudent.html" %}
+{% block title %} Teacher Search Page {% endblock %}
+{% block content %}
+
+<div class="box">
+  <form action="/teachersearch_page" method="post" name="commentteacher" >
+      <article class="media">
+    <div class="media-content">
+      <nav class="level">
+        <div class = "level-item">
+          <label class = "radio">
+            <input type="radio" name="lesson" value="chemistry" checked="checked" >
+              Chemistry
+          </label>  
+          <label class = "radio">
+            <input type="radio" name="lesson" value="math">
+              Math
+          </label>
+          <label class = "radio">
+            <input type="radio" name="lesson" value="physics">
+              Pyhsics
+          </label>
+        </div>
+            <div class="level-item">
+              <div class="control">
+                <input type="number" name="minage" class="input" min="18" max="85" required="required"/>
+              </div>
+              <p> <= Age <= </p>
+              <div class="control">
+                <input type="number" name="maxage" class="input" min="18" max="85" required="required"/>
+              </div>
+          </div>
+              <div class="level-item">
+                <p>Rating >= </p>
+                <div class="select">          
+                  <select name="rating" required="required">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6" >6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                  </select>
+                </div>
+            </div>
+            <div class="level-item">
+              <p>Vote Counter >= </p>
+              <div class="select">          
+                <select name="votecount" required="required">
+                  <option value="0">0</option>
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                </select>
+              </div>
+          </div>
+        <div class="level-item">
+          <p></p>
+          <div class="select">          
+            <select name="order">
+              <option value="0">Order by Name</option>
+              <option value="1">Rating: Highest to Lowest</option>
+              <option value="2">Vote Count: Highest to Lowest</option>
+            </select>
+          </div>
+      </div>
+            <div class="level-right">
+              <div class="level-item">
+                <button class="button is-info" name="array" type="submit">Search</button>
+              </div>
+            </div>
+          </nav>
+      </div>
+    </article>
+  </form> 
+  </div>
+      
+<table class="table is-striped is-fullwidth">
+  <tr>
+    <td>   
+      Name
+    </td>
+    <td>   
+     Surname  
+    </td>
+    <td>   
+       Age 
+    </td>
+    <td>   
+     Lesson type  
+    </td>
+    <td>   
+     Teaching rating  
+    </td>
+    <td>   
+       Votes counter 
+    </td>
+    <td>   
+      Profile 
+   </td>
+  </tr>
+  {% for T_username, Teacher in teachers %}    
+  <tr>    
+    <td>
+      {{ Teacher.Name }} 
+    </td>
+    <td>   
+    {{ Teacher.Surname }} 
+    </td>
+    <td>   
+      {{ Teacher.Age }} 
+    </td>
+    <td>   
+    {{ Teacher.Lesson_type }} 
+    </td>
+    <td>   
+    {{ Teacher.Teaching_rating }} 
+    </td>
+    <td>   
+      {{ Teacher.Votes_counter}} 
+    </td>
+    <td>   
+      <a href="{{ url_for('teacherpage', T_username = T_username)}}">
+        Teacher Page 
+      </a>
+    </td>  
+  </tr>
+  {% endfor %}
+</table>        
+{% endblock %}

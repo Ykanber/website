@@ -1,0 +1,88 @@
+{% extends "layoutforstudent.html" %}
+{% block title %} Student  Page {% endblock %}
+{% block content %}
+
+
+  <div class = "box">
+    <article class="media">
+        {% if arr[6]%}
+        <figure class="media-left">
+          <div class="control">
+            <a class="button is-danger" href="{{ url_for('changestudentinfo') }}">Change user info</a>
+          </div>
+        </figure>
+        {% endif %}
+      <div class="media-content">
+          <div class="content">
+            <div class="table-container">
+              <table class="table-is-bordered" >
+                {% if arr[6]%}
+                  <tr>
+                    <td>Username</td>
+                    <td>{{ arr[6] }}</td>
+                  </tr>
+              {% endif %}
+                <tr>
+                  <td>Name</td>
+                  <td>{{ arr[1] }}</td>
+                </tr>
+                <tr>
+                  <td>Surname</td>
+                  <td>{{ arr[2] }}</td>
+                </tr>
+                <tr>
+                  <td>Age</td>
+                  <td>{{ arr[3] }}</td>
+                </tr>
+                <tr>
+                  <td>Gender</td>
+                  <td>{{ arr[4] }}</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+      </div>
+    </article>
+  </div>
+
+  {% if teachers[0] %}
+  <div class="box">
+    <nav class="level">
+      <div class="level-item">
+        <strong>
+          Teachers of the student
+        </strong>
+      </div>
+    </nav>
+    <table class="table is-striped is-fullwidth is-hoverable">
+      <tr>
+        <td>   
+          Name
+        </td>
+        <td>   
+         Surname  
+        </td>
+        <td>   
+          Teacher Profile 
+        </td>
+      </tr>
+      {% for Teaching in teachers %}    
+      <tr>    
+        <td>
+          {{ Teaching.T_Name }} 
+        </td>
+        <td>   
+           {{ Teaching.T_Surname }}
+        </td>
+       <td>   
+         <a href="{{ url_for('teacherpage', T_username = Teaching.T_username)}}"> 
+          Teacher Page 
+          </a>
+        </td>  
+      </tr>
+      {% endfor %}
+      </table>
+    </div>
+  {% endif %}
+
+{% endblock %}

@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <title> My Movies {% block title %}{% endblock %} </title>
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'website.css')}}">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    </head>
+    <body>
+        <header>
+            <div class="navbar-brand">
+                  <span class="navbar-item">
+                    <a class="button is-link" href="{{ url_for('my_Student_profile') }}">My Profile</a>
+                  </span>
+                  <span class="navbar-item">
+                    <a class="button is-link" href="{{ url_for('logoutforstudent') }}">Log Out</a>
+                  </span>
+                  <span class="navbar-item">
+                    <a class="button is-link" href="{{ url_for('teachersearch_page') }}">Search</a>
+                  </span>
+                  <span class="navbar-item">
+                    <a class="button is-link" href="{{ url_for('deletepage') }}">Delete Account</a>
+                  </span>
+            </div>
+        </header>
+        {% block content %}{% endblock %}      
+    <footer>
+        <small> &copy 2020 Yavuz</small>
+    </footer> 
+    </body>
+</html>

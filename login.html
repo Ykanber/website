@@ -1,0 +1,38 @@
+ {% extends "layout.html" %}
+{% block title %} Student Login {% endblock %}
+{% block content%}  
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+  {% endwith %}
+    <form action="/login_page" method="post" name="Login">
+     <div class="field">
+      <label for="S_username" class="label">Username</label>
+      <div class="control">
+        <input type="text" name="username" class="input" maxlength="20" required="required"/>
+      </div>
+     </div>
+
+      <div class="field">
+        <label for="Password" class="label">Password</label>
+        <div class="control">
+          <input type="password" name="Password" class="input" maxlength="20" required="required">
+         </div>
+      </div>
+      <div class="field">
+        <label class="checkbox"> 
+          Check if you are teacher
+          <input type="checkbox" name="user" id="eafeafa" value="teacher">
+          <input type="hidden" name="user"  value="student" id="aefa">
+        </label>
+      </div>
+      <div class="field">
+        <input type ="submit"/>
+      </div>
+  </form>
+{% endblock %}

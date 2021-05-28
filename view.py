@@ -1,4 +1,4 @@
-from flask import abort, Flask, render_template, current_app, request, url_for, redirect, session
+from flask import abort, Flask, render_template, current_app, request, url_for, redirect, session, flash
 from datetime import date
 from teaching import Teaching
 
@@ -14,8 +14,13 @@ def Studentsignup_page():
         age = request.form['age']
         gender = request.form['gender']
         password = request.form['password']
-        db.student_sign(username,name,surname,age,gender,password)
-        return render_template("home.html")
+        issigned = db.issigned(username,2)
+        if issigned is False:
+            db.student_sign(username,name,surname,age,gender,password)
+            return render_template("home.html")
+        else:
+            flash("Username already taken")
+            return render_template("Studentsignup.html")
     else:
         return render_template("Studentsignup.html")
 
@@ -28,8 +33,13 @@ def Teachersignup_page():
         age = request.form['age']
         lesson_type = request.form['lesson_type']
         password = request.form['password']
-        db.teacher_sign(username,name,surname,age,lesson_type,password)
-        return render_template("home.html")
+        issigned = db.issigned(username,1)
+        if issigned is False:
+            db.teacher_sign(username,name,surname,age,lesson_type,password)
+            return render_template("home.html")
+        else:
+            flash("Username already taken")
+            return render_template("Teachersignup.html")
     else:
         return render_template("Teachersignup.html")
 
@@ -56,6 +66,7 @@ def login_page():
             if abc == True:
                 return redirect(url_for("my_Teacher_profile"))
             else:
+                flash("Wrong username or password")
                 return render_template("login.html")
         
         else:
@@ -63,6 +74,7 @@ def login_page():
             if abc == True:
                 return redirect(url_for("my_Student_profile"))
             else:
+                flash("Wrong username or password")
                 return render_template("login.html")
     else:
         return render_template("login.html") 
@@ -119,8 +131,10 @@ def teachersearch_page():
         minage = request.form['minage']
         maxage = request.form['maxage']
         rating = request.form['rating']
+        vote_count = request.form['votecount']
+        order = request.form['order']
 
-        filteredteachers = db.filterteachers(lesson,minage,maxage,rating)
+        filteredteachers = db.filterteachers(lesson,minage,maxage,rating,vote_count,order)
         if session["user"] == "student":
             return render_template("teachersearch.html", teachers=filteredteachers)
         else:
@@ -258,3 +272,48 @@ def teacherstatspage():
     teacher_stats = db.getteacherstats()
     return render_template("teacherstatspage.html", lesson_stats = lesson_stats, teacher_stats = teacher_stats)
 
+def changeteacherinfo():
+    db = current_app.config["db"]
+    if request.method == 'POST':
+        name = request.form['name']
+        surname = request.form['surname']
+        age = request.form['age']
+        lesson_type = request.form['lesson_type']
+        password = request.form['password']
+        db.changeteacherinfo(name,surname,age,lesson_type,password)
+        return redirect(url_for("my_Teacher_profile"))
+    else:
+        return render_template("changeteacherinfo.html")
+
+
+def changestudentinfo():
+    db = current_app.config["db"]
+    if request.method == 'POST':
+        name = request.form['name']
+        surname = request.form['surname']
+        age = request.form['age']
+        gender = request.form['gender']
+        password = request.form['password']
+        db.changestudentinfo(name,surname,age,gender,password)
+        return redirect(url_for("my_Student_profile"))
+    else:
+        return render_template("changestudentinfo.html")
+
+def changecomment():
+    db = current_app.config["db"]
+    if request.method == 'POST':
+        T_username = request.form["T_username"]
+        return(render_template("changecomment.html",T_username = T_username))
+
+def changecomment1():
+    db = current_app.config["db"]
+    username = session["username"]
+    if request.method == 'POST':
+        text = request.form["comment_text"]
+        rating = request.form["rating"]
+        T_username = request.form["T_username"]
+        db.changecomment(username,text,rating,T_username)
+        return redirect(url_for("teacherpage", T_username = T_username))
+
+    else:
+        return(render_template("changecomment.html",T_username = T_username))

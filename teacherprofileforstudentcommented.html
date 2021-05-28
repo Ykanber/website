@@ -1,0 +1,380 @@
+{% extends "layoutforstudent.html" %}
+{% block title %} Teacher  Page {% endblock %}
+{% block content %}
+
+<div class = "box">
+  <article class="media">
+    <figure class="media-left">
+      <p class="image is-64x64">
+        <img src="{{url_for('static',filename='images/128x128.png')}}">
+      </p>
+    </figure>
+    <div class="media-content">
+        <div class="content">
+          <div class="table-container">
+            <table class="table-is-bordered" >
+              <tr>
+                <td>Name</td>
+                <td>{{ arr[1] }}</td>
+              </tr>
+              <tr>
+                <td>Surname</td>
+                <td>{{ arr[2] }}</td>
+              </tr>
+              <tr>
+                <td>Age</td>
+                <td>{{ arr[3] }}</td>
+              </tr>
+              <tr>
+                <td>Lesson_type</td>
+                <td>{{ arr[4] }}</td>
+              </tr>
+              <tr>
+                <td>Teaching Rating</td>
+                <td>{{ arr[5] }}</td>
+              </tr>
+              <tr>
+                <td>Votes Counter</td>
+                <td>{{ arr[6] }}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+    </div>
+    <nav>
+      <div class="level-right">
+        <div class="level-item">
+          <form action="/teacherremovepage" method="post" name="removeteacher" >
+            <div class="field is-grouped">
+                <div class="control">
+                  <button class="button is-danger is-small" name="T_username" value="{{ arr[0] }}" >Remove Teacher</button>
+                </div>
+            </div>   
+        </form>   
+        </div>
+      </div>
+    </nav>
+  </article>
+</div>
+
+  
+{% if students[0] %}  
+<div class="box">
+  <nav class="level">
+    <div class="level-item">
+      <strong>
+        Students of the teacher
+      </strong>
+    </div>
+  </nav>
+    <table class="table is-striped is-fullwidth is-hoverable">
+      <tr>
+        <td>   
+          Name
+        </td>
+        <td>   
+         Surname  
+        </td>
+        <td>   
+          Student Profile 
+        </td>
+      </tr>
+      {% for Teaching in students %}    
+      <tr>    
+        <td>
+          {{ Teaching.S_Name }} 
+        </td>
+        <td>   
+           {{ Teaching.S_Surname }}
+        </td>
+       <td>   
+         <a href="{{ url_for('studentpage', S_username = Teaching.S_username)}}"> 
+            Student Page 
+          </a>
+        </td>  
+      </tr>
+      {% endfor %}
+      </table>
+    </div>
+  {% endif %}
+
+  
+      <section class = "section">
+        
+      {% if comments[0] %}
+        {% for Comment in comments %}       
+          {% if Comment.liked == 0  %}
+          <div class="box">
+            <article class="media">
+              <figure class="media-left">
+                <h1 class="has-text-danger is-size-3 px-4">
+                  {{ Comment.rating }}
+                </h1>
+                <form action="/likecommentpage" method="post" name="likecomment">
+                  <div class="control">
+                       <button class="button45" type="submit" name="comment_id" value="{{ Comment.comment_id }} ">
+                         <img src="{{url_for('static',filename='images/like.png')}}" >
+                       </button>
+                       {{ Comment.like_count}}
+                  </div>
+               </form>
+               <form action="/dislikecommentpage" method="post" name="commentteacher" >
+                <span class="field is-grouped">
+                      <button class="button45" type="submit" name="comment_id" value="{{ Comment.comment_id }} ">
+                        <img src="{{url_for('static',filename='images/dislike.png')}}" >
+                      </button>
+                      {{ Comment.dislike_count }}
+                  </span>
+              </form>
+              </figure>
+              <div class="media-content">
+                <div class="content">
+                  <p>
+                    <small>{{ Comment.date }} </small>
+                    <br>
+                    <p class="is-size-4">
+                    {{ Comment.comment_text}}
+                   </p>
+                  </p>
+                </div>
+              </div>
+            </article>
+          </div>
+          {% endif %}
+          {% if Comment.liked == 1  %}
+          <div class="box">
+            <article class="media">
+              <figure class="media-left">
+                <h1 class="has-text-danger is-size-3 px-4">
+                  {{ Comment.rating }}
+                </h1>
+                <form action="/likecommentpage" method="post" name="likecomment">
+                  <div class="control">
+                       <button class="button45" type="submit" name="comment_id" value="{{ Comment.comment_id }} ">
+                         <img src="{{url_for('static',filename='images/likedlike.png')}}" >
+                       </button>
+                       {{ Comment.like_count}}
+                  </div>
+               </form>
+               <form action="/dislikecommentpage" method="post" name="commentteacher" >
+                <span class="field is-grouped">
+                      <button class="button45" type="submit" name="comment_id" value="{{ Comment.comment_id }} ">
+                        <img src="{{url_for('static',filename='images/dislike.png')}}" >
+                      </button>
+                      {{ Comment.dislike_count }}
+                  </span>
+              </form>
+              </figure>
+              <div class="media-content">
+                <div class="content">
+                  <p>
+                    <small>{{ Comment.date }} </small>
+                    <br>
+                    <p class="is-size-4">
+                    {{ Comment.comment_text}}
+                   </p>
+                  </p>
+                </div>
+              </div>
+            </article>
+          </div>
+          {% endif%}
+          {% if Comment.liked == 2  %}
+          <div class="box">
+            <article class="media">
+              <figure class="media-left">
+                <h1 class="has-text-danger is-size-3 px-4">
+                  {{ Comment.rating }}
+                </h1>
+                <form action="/likecommentpage" method="post" name="likecomment">
+                  <div class="control">
+                       <button class="button45" type="submit" name="comment_id" value="{{ Comment.comment_id }} ">
+                         <img src="{{url_for('static',filename='images/like.png')}}" >
+                       </button>
+                       {{ Comment.like_count}}
+                  </div>
+               </form>
+               <form action="/dislikecommentpage" method="post" name="commentteacher" >
+                <span class="field is-grouped">
+                      <button class="button45" type="submit" name="comment_id" value="{{ Comment.comment_id }} ">
+                        <img src="{{url_for('static',filename='images/dislikeddislike.png')}}" >
+                      </button>
+                      {{ Comment.dislike_count }}
+                  </span>
+              </form>
+              </figure>
+              <div class="media-content">
+                <div class="content">
+                  <p>
+                    <small>{{ Comment.date }} </small>
+                    <br>
+                    <p class="is-size-4">
+                    {{ Comment.comment_text}}
+                   </p>
+                  </p>
+                </div>
+              </div>
+            </article>
+          </div>
+          {% endif%}
+          {% if Comment.liked == 3  %}
+          <div class="box">
+            <article class="media">
+              <figure class="media-left">
+                <h1 class="has-text-danger is-size-3 px-4">
+                  {{ Comment.rating }}
+                </h1>
+                <form action="/likecommentpage" method="post" name="likecomment">
+                  <div class="control">
+                       <button class="button45" type="submit" name="comment_id" value="{{ Comment.comment_id }} ">
+                         <img src="{{url_for('static',filename='images/like.png')}}" >
+                       </button>
+                       {{ Comment.like_count}}
+                  </div>
+               </form>
+               <form action="/dislikecommentpage" method="post" name="commentteacher" >
+                <span class="field is-grouped">
+                      <button class="button45" type="submit" name="comment_id" value="{{ Comment.comment_id }} ">
+                        <img src="{{url_for('static',filename='images/dislike.png')}}" >
+                      </button>
+                      {{ Comment.dislike_count }}
+                  </span>
+              </form>
+              </figure>
+              <div class="media-content">
+                <div class="content">
+                  <p>
+                    <small>{{ Comment.date }} </small>
+                    <br>
+                    <p class="is-size-4">
+                    {{ Comment.comment_text}}
+                   </p>
+                  </p>
+                </div>
+              </div>
+              <form action="/commentremovepage" method="post" name="commentteacher" >
+                <div class="field is-grouped">
+                     <div class="control">
+                        <button class="button is-danger is-small" name="T_username" value="{{ arr[0] }}">Remove Comment</button>
+                    </div>
+                </div>
+              </form>
+              <form action="/changecomment" method="post" name="commentteacher">
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button class="button is-danger is-small" name="T_username" value="{{ arr[0] }}">Change Comment</button>
+                    </div>
+                </div>
+            </form>
+            </article>
+          </div>
+          {% endif%}
+          {% if Comment.liked == 4  %}
+          <div class="box">
+            <article class="media">
+              <figure class="media-left">
+                <h1 class="has-text-danger is-size-3 px-4">
+                  {{ Comment.rating }}
+                </h1>
+                <form action="/likecommentpage" method="post" name="likecomment">
+                  <div class="control">
+                       <button class="button45" type="submit" name="comment_id" value="{{ Comment.comment_id }} ">
+                         <img src="{{url_for('static',filename='images/likedlike.png')}}" >
+                       </button>
+                       {{ Comment.like_count}}
+                  </div>
+               </form>
+               <form action="/dislikecommentpage" method="post" name="commentteacher" >
+                <span class="field is-grouped">
+                      <button class="button45" type="submit" name="comment_id" value="{{ Comment.comment_id }} ">
+                        <img src="{{url_for('static',filename='images/dislike.png')}}" >
+                      </button>
+                      {{ Comment.dislike_count }}
+                  </span>
+              </form>
+              </figure>
+              <div class="media-content">
+                <div class="content">
+                  <p>
+                    <small>{{ Comment.date }} </small>
+                    <br>
+                    <p class="is-size-4">
+                    {{ Comment.comment_text}}
+                   </p>
+                  </p>
+                </div>
+              </div>
+              <form action="/commentremovepage" method="post" name="commentteacher" >
+                <div class="field is-grouped">
+                     <div class="control">
+                        <button class="button is-danger is-small" name="T_username" value="{{ arr[0] }}">Remove Comment</button>
+                    </div>
+                </div>
+              </form>
+              <form action="/changecomment" method="post" name="commentteacher">
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button class="button is-danger is-small" name="T_username" value="{{ arr[0] }}">Change Comment</button>
+                    </div>
+                </div>
+            </form>
+            </article>
+          </div>
+          {% endif %}
+          {% if Comment.liked == 5  %}
+          <div class="box">
+            <article class="media">
+              <figure class="media-left">
+                <h1 class="has-text-danger is-size-3 px-4">
+                  {{ Comment.rating }}
+                </h1>
+                <form action="/likecommentpage" method="post" name="likecomment">
+                  <div class="control">
+                       <button class="button45" type="submit" name="comment_id" value="{{ Comment.comment_id }} ">
+                         <img src="{{url_for('static',filename='images/like.png')}}" >
+                       </button>
+                       {{ Comment.like_count}}
+                  </div>
+               </form>
+               <form action="/dislikecommentpage" method="post" name="commentteacher" >
+                <span class="field is-grouped">
+                      <button class="button45" type="submit" name="comment_id" value="{{ Comment.comment_id }} ">
+                        <img src="{{url_for('static',filename='images/dislikeddislike.png')}}" >
+                      </button>
+                      {{ Comment.dislike_count }}
+                  </span>
+              </form>
+              </figure>
+              <div class="media-content">
+                <div class="content">
+                  <p>
+                    <small>{{ Comment.date }} </small>
+                    <br>
+                    <p class="is-size-4">
+                    {{ Comment.comment_text}}
+                   </p>
+                  </p>
+                </div>
+              </div>
+              <form action="/commentremovepage" method="post" name="commentteacher" >
+                <div class="field is-grouped">
+                     <div class="control">
+                        <button class="button is-danger is-small" name="T_username" value="{{ arr[0] }}">Remove Comment</button>
+                    </div>
+                </div>
+              </form>
+              <form action="/changecomment" method="post" name="commentteacher">
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button class="button is-danger is-small" name="T_username" value="{{ arr[0] }}">Change Comment</button>
+                    </div>
+                </div>
+            </form>
+            </article>
+          </div>
+          {% endif %}
+          {% endfor %}
+      {% endif %}
+
+    </section>
+{% endblock %}

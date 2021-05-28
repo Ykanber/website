@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <title> Home Page </title>
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'website.css')}}">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    </head>
+    <body>
+        <header>
+          <nav class="level-item">
+            <div class="navbar-brand">
+                <span class="navbar-item">
+                  <a class="button is-link" href="{{ url_for('login_page') }}">For login</a>
+                </span>
+                <span class="navbar-item">
+                    <a class="button is-link" href="{{ url_for('Teachersignup_page') }}">For Teacher Sign up</a>
+                  </span>
+                  <span class="navbar-item">
+                    <a class="button is-link" href="{{ url_for('Studentsignup_page') }}">For Student Sign Up</a>
+                  </span>                  
+              </div>
+            </nav>
+        </header>    
+    <footer>
+        <small> &copy 2020 Yavuz</small>
+    </footer> 
+    </body>
+</html>

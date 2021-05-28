@@ -6,100 +6,134 @@ from comment import Comment
 from lstats import Lstats
 from tstats import Tstats
 
+connection = dpabi2.connect(
+    host = 'localhost', 
+    user='root',
+    passwd='12345',
+    database = "websitedb"
+)
 
 class Database:
     def __init__(self):
-        connection = dpabi2.connect(
-        host = 'eu-cdbr-west-03.cleardb.net', 
-        user='b5eb48b89387d3',
-        passwd='5db19a2d',
-        database = "heroku_2b897dd0df8ac97"
-        )
         mycursor = connection.cursor() 
-        #statement ="""CREATE TABLE Teacher (
-        #    T_username VARCHAR(20) PRIMARY KEY,
-        #    Name VARCHAR(20) NOT NULL,
-        #    Surname VARCHAR(20) NOT NULL,
-        #    age int NOT NULL,
-        #    Lesson_type VARCHAR(30) NOT NULL,
-        #    Teaching_rating float default 0.0,
-        #    Votes_counter int default 0,
-        #    Password VARCHAR(20) NOT NULL)
-        #"""
-        #mycursor.execute(statement)
-        #mycursor.close()
-        #mycursor = connection.cursor()
-        #statement ="""CREATE TABLE Student (
-        #    S_username VARCHAR(20) PRIMARY KEY,
-        #    Name VARCHAR(20) NOT NULL,
-        #    Surname VARCHAR(20) NOT NULL,
-        #    age int NOT NULL,
-        #    gender VARCHAR(8),
-        #    Password VARCHAR(20) NOT NULL)
-        #"""
-        #mycursor.execute(statement)
-        #mycursor.close()
-        #mycursor = connection.cursor()
-        #statement ="""CREATE TABLE Teaching_table (
-        #    T_username VARCHAR(20) NOT NULL,
-        #    S_username VARCHAR(20) NOT NULL, 
-        #    PRIMARY KEY(T_username,S_username),
-        #    FOREIGN KEY(T_username) References Teacher(T_username),
-        #    FOREIGN KEY(S_username) References Student(S_username))
-        #"""
-        #mycursor.execute(statement)
-        #mycursor.close()
-        #mycursor = connection.cursor()
-        #statement ="""CREATE TABLE Commentt(
-        #    Comment_id int AUTO_INCREMENT PRIMARY KEY,
-        #    T_username VARCHAR(20) NOT NULL,
-        #    S_username VARCHAR(20) NOT NULL,
-        #    rating int NOT NULL,
-        #    Comment_text text NOT NULL,
-        #    Date Date NOT NULL,
-        #    Like_count int default 0,
-        #    Dislike_count int default 0,
-        #    UNIQUE(T_username,S_username),
-        #    CHECK((rating>=0) AND (rating<=10)),
-        #    FOREIGN KEY(T_username) References Teacher(T_username),
-        #    FOREIGN KEY(S_username) References Student(S_username))
-        #"""
-        #mycursor.execute(statement)
-        #mycursor.close()
-        #mycursor = connection.cursor()
-        #statement = """CREATE TABLE Commenting(
-        #   Comment_id int NOT NULL,
-        #   Voter_username  VARCHAR(20) NOT NULL,
-        #   Like_type int NOT NULL,
-        #   PRIMARY KEY(Comment_id,Voter_username),
-        #   UNIQUE(Comment_id,Voter_username),
-        #   FOREIGN KEY(Comment_id) References Commentt(Comment_id))
-        #"""    
-        #mycursor.execute(statement)
+        mycursor.execute("CREATE DATABASE IF NOT EXISTS websitedb")
+        statement ="""CREATE TABLE IF NOT EXISTS Teacher (
+            T_username VARCHAR(20) PRIMARY KEY,
+            Name VARCHAR(20) NOT NULL,
+            Surname VARCHAR(20) NOT NULL,
+            age int NOT NULL,
+            Lesson_type VARCHAR(30) NOT NULL,
+            Teaching_rating float default 0.0,
+            Votes_counter int default 0,
+            Password VARCHAR(20) NOT NULL)
+        """
+        mycursor.execute(statement)
+        mycursor.close()
+        mycursor = connection.cursor()
+        statement ="""CREATE TABLE IF NOT EXISTS Student (
+            S_username VARCHAR(20) PRIMARY KEY,
+            Name VARCHAR(20) NOT NULL,
+            Surname VARCHAR(20) NOT NULL,
+            age int NOT NULL,
+            gender VARCHAR(8),
+            Password VARCHAR(20) NOT NULL)
+        """
+        mycursor.execute(statement)
+        mycursor.close()
+        mycursor = connection.cursor()
+        statement ="""CREATE TABLE IF NOT EXISTS Teaching_table (
+            T_username VARCHAR(20) NOT NULL,
+            S_username VARCHAR(20) NOT NULL, 
+            PRIMARY KEY(T_username,S_username),
+            FOREIGN KEY(T_username) References Teacher(T_username),
+            FOREIGN KEY(S_username) References Student(S_username))
+        """
+        mycursor.execute(statement)
+        mycursor.close()
+        mycursor = connection.cursor()
+        statement ="""CREATE TABLE IF NOT EXISTS Commentt(
+            Comment_id int AUTO_INCREMENT PRIMARY KEY,
+            T_username VARCHAR(20) NOT NULL,
+            S_username VARCHAR(20) NOT NULL,
+            rating int NOT NULL,
+            Comment_text text NOT NULL,
+            Date Date NOT NULL,
+            Like_count int default 0,
+            Dislike_count int default 0,
+            UNIQUE(T_username,S_username),
+            CHECK((rating>=0) AND (rating<=10)),
+            FOREIGN KEY(T_username) References Teacher(T_username),
+            FOREIGN KEY(S_username) References Student(S_username))
+        """
+        mycursor.execute(statement)
+        mycursor.close()
+        mycursor = connection.cursor()
+        statement = """CREATE TABLE IF NOT EXISTS Commenting(
+           Comment_id int NOT NULL,
+           Voter_username  VARCHAR(20) NOT NULL,
+           Like_type int NOT NULL,
+           PRIMARY KEY(Comment_id,Voter_username),
+           UNIQUE(Comment_id,Voter_username),
+           FOREIGN KEY(Comment_id) References Commentt(Comment_id))
+        """    
+        mycursor.execute(statement)
         mycursor.close()
         connection.close()
 
     def teacher_sign(self,T_username,name,surname,age,lesson_type,password): #teacher sign operation
         connection = dpabi2.connect(
-        host = 'eu-cdbr-west-03.cleardb.net', 
-        user='b5eb48b89387d3',
-        passwd='5db19a2d',
-        database = "heroku_2b897dd0df8ac97"
-        )
+         host = 'localhost', 
+         user='root',
+         passwd='12345',
+         database = "websitedb"
+        )        
         mycursor = connection.cursor()
         statement ="INSERT INTO Teacher (T_username,Name,Surname,age,Lesson_type,Password) VALUES(%s,%s,%s,%s,%s,%s)"
-
         mycursor.execute(statement,(T_username,name,surname,age,lesson_type,password))
         connection.commit()
         mycursor.close() 
         connection.close()
 
+
+    def issigned(self,username,type):
+        connection = dpabi2.connect(
+            host = 'localhost', 
+            user='root',
+            passwd='12345',
+            database = "websitedb"
+            )   
+        if type == 1:
+            mycursor = connection.cursor()
+            statement ="SELECT * FROM Teacher WHERE T_username = %s"
+            mycursor.execute(statement,(username,))
+            a = mycursor.fetchone()
+            print(a)
+            mycursor.close() 
+            connection.close()
+            if a is None:
+                return False
+            else:
+                return True
+
+        elif type == 2:
+            mycursor = connection.cursor()
+            statement ="SELECT * FROM STUDENT WHERE S_username = %s"
+            mycursor.execute(statement,(username,))
+            a = mycursor.fetchone()
+            mycursor.close() 
+            connection.close()
+            if a is None:
+                return False
+            else:
+                return True
+
+
     def student_sign(self,S_username,name,surname,age,gender,password):   #student sign operation
         connection = dpabi2.connect(
-        host = 'eu-cdbr-west-03.cleardb.net', 
-        user='b5eb48b89387d3',
-        passwd='5db19a2d',
-        database = "heroku_2b897dd0df8ac97"
+         host = 'localhost', 
+         user='root',
+         passwd='12345',
+         database = "websitedb"
         )
         mycursor = connection.cursor()
         statement ="INSERT INTO Student (S_username,Name,Surname,age,gender,Password) VALUES(%s,%s,%s,%s,%s,%s)"
@@ -110,10 +144,10 @@ class Database:
 
     def teacher_login(self,T_username,Password):    #teacher login operation
         connection = dpabi2.connect(
-        host = 'eu-cdbr-west-03.cleardb.net', 
-        user='b5eb48b89387d3',
-        passwd='5db19a2d',
-        database = "heroku_2b897dd0df8ac97"
+         host = 'localhost', 
+         user='root',
+         passwd='12345',
+         database = "websitedb"
         )
         mycursor = connection.cursor()
         mycursor.execute("Select * FROM Teacher WHERE ((T_username = %s) AND (Password = %s))",(T_username,Password))
@@ -135,10 +169,10 @@ class Database:
 
     def student_login(self,S_username,Password):
         connection = dpabi2.connect(
-        host = 'eu-cdbr-west-03.cleardb.net', 
-        user='b5eb48b89387d3',
-        passwd='5db19a2d',
-        database = "heroku_2b897dd0df8ac97"
+         host = 'localhost', 
+         user='root',
+         passwd='12345',
+         database = "websitedb"
         )
         mycursor = connection.cursor()
         mycursor.execute("Select * FROM Student WHERE ((S_username = %s) AND (Password = %s))",(S_username,Password))
@@ -158,10 +192,10 @@ class Database:
         
     def getteachers(self):
         connection = dpabi2.connect(
-        host = 'eu-cdbr-west-03.cleardb.net', 
-        user='b5eb48b89387d3',
-        passwd='5db19a2d',
-        database = "heroku_2b897dd0df8ac97"
+         host = 'localhost', 
+         user='root',
+         passwd='12345',
+         database = "websitedb"
         )
         teachers = []
         mycursor = connection.cursor()
@@ -175,10 +209,10 @@ class Database:
 
     def getteacher(self,T_username):
         connection = dpabi2.connect(
-        host = 'eu-cdbr-west-03.cleardb.net', 
-        user='b5eb48b89387d3',
-        passwd='5db19a2d',
-        database = "heroku_2b897dd0df8ac97"
+         host = 'localhost', 
+         user='root',
+         passwd='12345',
+         database = "websitedb"
         )
         mycursor = connection.cursor()
         sql = "Select * FROM Teacher WHERE (T_username = %s)"
@@ -190,10 +224,10 @@ class Database:
 
     def getstudent(self,S_username):
         connection = dpabi2.connect(
-        host = 'eu-cdbr-west-03.cleardb.net', 
-        user='b5eb48b89387d3',
-        passwd='5db19a2d',
-        database = "heroku_2b897dd0df8ac97"
+         host = 'localhost', 
+         user='root',
+         passwd='12345',
+         database = "websitedb"
         )
         mycursor = connection.cursor()
         sql = "Select * FROM Student WHERE (S_username = %s)"
@@ -205,10 +239,10 @@ class Database:
 
     def teacheradd(self,T_username,S_username):
         connection = dpabi2.connect(
-        host = 'eu-cdbr-west-03.cleardb.net', 
-        user='b5eb48b89387d3',
-        passwd='5db19a2d',
-        database = "heroku_2b897dd0df8ac97"
+         host = 'localhost', 
+         user='root',
+         passwd='12345',
+         database = "websitedb"
         )
         mycursor = connection.cursor()
         mycursor.execute("INSERT INTO Teaching_table (T_username,S_username) VALUES(%s,%s)", (T_username,S_username))
@@ -218,10 +252,10 @@ class Database:
 
     def commentadd(self,T_username,S_username,rating,comment,date):
         connection = dpabi2.connect(
-        host = 'eu-cdbr-west-03.cleardb.net', 
-        user='b5eb48b89387d3',
-        passwd='5db19a2d',
-        database = "heroku_2b897dd0df8ac97"
+         host = 'localhost', 
+         user='root',
+         passwd='12345',
+         database = "websitedb"
         )
         mycursor = connection.cursor()
         mycursor.execute("INSERT INTO Commentt (T_username,S_username,rating,Comment_text,Date) VALUES(%s,%s,%s,%s,%s)", (T_username,S_username,rating,comment,date))
@@ -241,10 +275,10 @@ class Database:
 
     def teacherremove(self,T_username,S_username):
         connection = dpabi2.connect(
-        host = 'eu-cdbr-west-03.cleardb.net', 
-        user='b5eb48b89387d3',
-        passwd='5db19a2d',
-        database = "heroku_2b897dd0df8ac97"
+         host = 'localhost', 
+         user='root',
+         passwd='12345',
+         database = "websitedb"
         )
         mycursor = connection.cursor()
         mycursor.execute("DELETE FROM Teaching_table WHERE (T_username = %s AND S_username = %s)", (T_username,S_username))
@@ -254,10 +288,10 @@ class Database:
 
     def commentremove(self,T_username,S_username):
         connection = dpabi2.connect(
-        host = 'eu-cdbr-west-03.cleardb.net', 
-        user='b5eb48b89387d3',
-        passwd='5db19a2d',
-        database = "heroku_2b897dd0df8ac97"
+         host = 'localhost', 
+         user='root',
+         passwd='12345',
+         database = "websitedb"
         )
         mycursor = connection.cursor()
         mycursor.execute("SELECT Comment_id FROM Commentt WHERE (T_username = %s AND S_username = %s)", (T_username,S_username))
@@ -301,10 +335,10 @@ class Database:
 
     def checkenrollment(self,T_username,S_username):
         connection = dpabi2.connect(
-        host = 'eu-cdbr-west-03.cleardb.net', 
-        user='b5eb48b89387d3',
-        passwd='5db19a2d',
-        database = "heroku_2b897dd0df8ac97"
+         host = 'localhost', 
+         user='root',
+         passwd='12345',
+         database = "websitedb"
         )
         mycursor = connection.cursor()
         mycursor.execute( "Select * FROM Teaching_table WHERE (T_username = %s) AND (S_username = %s)", (T_username,S_username))
@@ -316,10 +350,10 @@ class Database:
 
     def checkcommented(self,T_username,S_username):
         connection = dpabi2.connect(
-        host = 'eu-cdbr-west-03.cleardb.net', 
-        user='b5eb48b89387d3',
-        passwd='5db19a2d',
-        database = "heroku_2b897dd0df8ac97"
+         host = 'localhost', 
+         user='root',
+         passwd='12345',
+         database = "websitedb"
         )
         mycursor = connection.cursor()
         mycursor.execute( "Select * FROM Commentt WHERE (T_username = %s) AND (S_username = %s)", (T_username,S_username))
@@ -331,10 +365,10 @@ class Database:
     
     def getstudentteachers(self,S_username):
         connection = dpabi2.connect(
-        host = 'eu-cdbr-west-03.cleardb.net', 
-        user='b5eb48b89387d3',
-        passwd='5db19a2d',
-        database = "heroku_2b897dd0df8ac97"
+        host = 'localhost', 
+        user='root',
+        passwd='12345',
+        database = "websitedb"
         )
         teaching = []
         mycursor = connection.cursor()  
@@ -352,10 +386,10 @@ class Database:
 
     def getteachersstudents(self,T_username):
         connection = dpabi2.connect(
-        host = 'eu-cdbr-west-03.cleardb.net', 
-        user='b5eb48b89387d3',
-        passwd='5db19a2d',
-        database = "heroku_2b897dd0df8ac97"
+        host = 'localhost', 
+        user='root',
+        passwd='12345',
+        database = "websitedb"
         )
         teaching = []
         mycursor = connection.cursor()  
@@ -373,10 +407,10 @@ class Database:
     
     def checkvoted(self,comment_id,s_username):
         connection = dpabi2.connect(
-        host = 'eu-cdbr-west-03.cleardb.net', 
-        user='b5eb48b89387d3',
-        passwd='5db19a2d',
-        database = "heroku_2b897dd0df8ac97"
+        host = 'localhost', 
+        user='root',
+        passwd='12345',
+        database = "websitedb"
         )
         mycursor = connection.cursor()
         mycursor.execute( "Select Commenting.Like_type FROM Commenting WHERE Comment_id = %s AND Voter_username=%s ", (comment_id,s_username,))
@@ -390,10 +424,10 @@ class Database:
     
     def addlikevote(self,comment_id,s_username):
         connection = dpabi2.connect(
-        host = 'eu-cdbr-west-03.cleardb.net', 
-        user='b5eb48b89387d3',
-        passwd='5db19a2d',
-        database = "heroku_2b897dd0df8ac97"
+        host = 'localhost', 
+        user='root',
+        passwd='12345',
+        database = "websitedb"
         )
         mycursor = connection.cursor()
         sql ="""
@@ -417,10 +451,10 @@ class Database:
 
     def adddislikevote(self,comment_id,s_username):
         connection = dpabi2.connect(
-        host = 'eu-cdbr-west-03.cleardb.net', 
-        user='b5eb48b89387d3',
-        passwd='5db19a2d',
-        database = "heroku_2b897dd0df8ac97"
+        host = 'localhost', 
+        user='root',
+        passwd='12345',
+        database = "websitedb"
         )
         mycursor = connection.cursor()
         sql ="""
@@ -445,10 +479,10 @@ class Database:
 
     def removelikevote(self,comment_id,s_username):
         connection = dpabi2.connect(
-        host = 'eu-cdbr-west-03.cleardb.net', 
-        user='b5eb48b89387d3',
-        passwd='5db19a2d',
-        database = "heroku_2b897dd0df8ac97"
+        host = 'localhost', 
+        user='root',
+        passwd='12345',
+        database = "websitedb"
         )
         mycursor = connection.cursor()
         sql ="""
@@ -472,10 +506,10 @@ class Database:
 
     def removedislikevote(self,comment_id,s_username):
         connection = dpabi2.connect(
-        host = 'eu-cdbr-west-03.cleardb.net', 
-        user='b5eb48b89387d3',
-        passwd='5db19a2d',
-        database = "heroku_2b897dd0df8ac97"
+        host = 'localhost', 
+        user='root',
+        passwd='12345',
+        database = "websitedb"
         )
         mycursor = connection.cursor()
         sql ="""
@@ -499,10 +533,10 @@ class Database:
 
     def getcomments(self,T_username):
         connection = dpabi2.connect(
-        host = 'eu-cdbr-west-03.cleardb.net', 
-        user='b5eb48b89387d3',
-        passwd='5db19a2d',
-        database = "heroku_2b897dd0df8ac97"
+        host = 'localhost', 
+        user='root',
+        passwd='12345',
+        database = "websitedb"
         )
         teaching = []
         mycursor = connection.cursor()  
@@ -519,10 +553,10 @@ class Database:
 
     def getjustcomments(self,S_username,T_username,commented):
         connection = dpabi2.connect(
-        host = 'eu-cdbr-west-03.cleardb.net', 
-        user='b5eb48b89387d3',
-        passwd='5db19a2d',
-        database = "heroku_2b897dd0df8ac97"
+        host = 'localhost', 
+        user='root',
+        passwd='12345',
+        database = "websitedb"
         )
         db = current_app.config["db"]
         allcomments = []
@@ -587,19 +621,30 @@ class Database:
         return allcomments
 
 
-    def filterteachers(self,lesson,minage,maxage,rating):
+    def filterteachers(self,lesson,minage,maxage,rating,votecounter,order):
         connection = dpabi2.connect(
-        host = 'eu-cdbr-west-03.cleardb.net', 
-        user='b5eb48b89387d3',
-        passwd='5db19a2d',
-        database = "heroku_2b897dd0df8ac97"
-        )   
+        host = 'localhost', 
+        user='root',
+        passwd='12345',
+        database = "websitedb"
+        )       
         teachers = []
         mycursor = connection.cursor()
         sql ="""SELECT * FROM TEACHER   
-            WHERE ((age <= %s AND age >= %s) AND Lesson_type = %s AND Teaching_rating >= %s) 
+            WHERE ((age <= %s AND age >= %s) AND Lesson_type = %s AND Teaching_rating >= %s AND Votes_counter >= %s)
+            ORDER BY Name ASC 
             """
-        mycursor.execute(sql,(maxage,minage,lesson,rating,))
+        if order == 1:
+            sql ="""SELECT * FROM TEACHER   
+            WHERE ((age <= %s AND age >= %s) AND Lesson_type = %s AND Teaching_rating >= %s AND Votes_counter >= %s) 
+            ORDER BY Rating DESC 
+            """
+        elif order == 2:
+            sql ="""SELECT * FROM TEACHER   
+            WHERE ((age <= %s AND age >= %s) AND Lesson_type = %s AND Teaching_rating >= %s AND Votes_counter >= %s) 
+            ORDER BY Votes_counter DESC 
+            """
+        mycursor.execute(sql,(maxage,minage,lesson,rating,votecounter,))
         for T_username, Name, Surname, Age, Lesson_type, Teaching_rating, Votes_counter, Password in mycursor:
             Teacher_ = Teacher(T_username,Name,Surname,Age,Lesson_type,Teaching_rating,Votes_counter)
             teachers.append((T_username,Teacher_))  
@@ -609,18 +654,18 @@ class Database:
 
     def getlessonstats(self):
         connection = dpabi2.connect(
-        host = 'eu-cdbr-west-03.cleardb.net', 
-        user='b5eb48b89387d3',
-        passwd='5db19a2d',
-        database = "heroku_2b897dd0df8ac97"
-        )    
+        host = 'localhost', 
+        user='root',
+        passwd='12345',
+        database = "websitedb"
+        )       
         mycursor = connection.cursor()
         stats = []
         sql ="""SELECT COUNT(m.T_username), AVG(m.Teaching_rating) , m.Lesson_type    
         FROM Teacher AS m INNER JOIN Teaching_table AS g
         ON m.T_username = g.T_username
         GROUP BY m.Lesson_type 
-        ORDER BY m.Teaching_rating
+        ORDER BY m.Teaching_rating DESC
         """
         mycursor.execute(sql,)
         for count, average, lesson_type in mycursor:
@@ -632,18 +677,18 @@ class Database:
 
     def getteacherstats(self):
         connection = dpabi2.connect(
-        host = 'eu-cdbr-west-03.cleardb.net', 
-        user='b5eb48b89387d3',
-        passwd='5db19a2d',
-        database = "heroku_2b897dd0df8ac97"
-        )    
+        host = 'localhost', 
+        user='root',
+        passwd='12345',
+        database = "websitedb"
+        )       
         mycursor = connection.cursor()
         stats = []
-        sql ="""SELECT COUNT(g.S_username) AS total, AVG(m.Teaching_rating) , m.Name, m.Surname    
+        sql ="""SELECT COUNT(g.S_username) AS total, AVG(m.Teaching_rating) ,m.Name, m.Surname    
         FROM Teacher AS m INNER JOIN Teaching_table AS g
         ON m.T_username = g.T_username
-        GROUP BY m.Lesson_type
-        ORDER BY total 
+        GROUP BY m.T_username
+        ORDER BY total DESC 
         """
         mycursor.execute(sql,)
         for count, average, name, surname in mycursor:
@@ -655,11 +700,11 @@ class Database:
 
     def deleteteacher(self,username):
         connection = dpabi2.connect(
-        host = 'eu-cdbr-west-03.cleardb.net', 
-        user='b5eb48b89387d3',
-        passwd='5db19a2d',
-        database = "heroku_2b897dd0df8ac97"
-        )      
+        host = 'localhost', 
+        user='root',
+        passwd='12345',
+        database = "websitedb"
+        )       
         mycursor = connection.cursor()
         sql = """
             DELETE FROM Teaching_table WHERE T_username = %s  
@@ -701,11 +746,11 @@ class Database:
 
     def deletestudent(self,username):
         connection = dpabi2.connect(
-        host = 'eu-cdbr-west-03.cleardb.net', 
-        user='b5eb48b89387d3',
-        passwd='5db19a2d',
-        database = "heroku_2b897dd0df8ac97"
-        )     
+        host = 'localhost', 
+        user='root',
+        passwd='12345',
+        database = "websitedb"
+        )       
         db = current_app.config["db"]
         mycursor = connection.cursor()
         sql = """
@@ -751,3 +796,138 @@ class Database:
         connection.commit()
         mycursor.close()
         connection.close()
+
+    def changestudentinfo(self,name,surname,age,gender,password):
+        connection = dpabi2.connect(
+        host = 'localhost', 
+        user='root',
+        passwd='12345',
+        database = "websitedb"
+        )    
+        oldusername = session["username"]
+        mycursor = connection.cursor()
+        sql = """
+        UPDATE Student SET Name = %s
+        WHERE S_username = %s
+        """
+        mycursor.execute(sql,(name,oldusername,))
+        connection.commit()
+        mycursor.close()
+        session["Name"] = name
+        mycursor = connection.cursor()
+        sql = """
+        UPDATE Student SET Surname = %s
+        WHERE S_username = %s
+        """
+        mycursor.execute(sql,(surname,oldusername,))
+        connection.commit()
+        mycursor.close()
+        session["Surname"] = surname
+        mycursor = connection.cursor()
+        sql = """
+        UPDATE Student SET age = %s
+        WHERE S_username = %s
+        """
+        mycursor.execute(sql,(age,oldusername,))
+        connection.commit()
+        mycursor.close()
+        session["Age"] = age
+        mycursor = connection.cursor()
+        sql = """
+        UPDATE Student SET gender = %s
+        WHERE S_username = %s
+        """
+        mycursor.execute(sql,(gender,oldusername,))
+        connection.commit()
+        mycursor.close()
+        session["Gender"] = gender
+        mycursor = connection.cursor()
+        sql = """
+        UPDATE Student SET Password = %s
+        WHERE S_username = %s
+        """
+        mycursor.execute(sql,(password,oldusername,))
+        connection.commit()
+        mycursor.close()
+        connection.close()
+
+
+    def changeteacherinfo(self,name,surname,age,lesson_type,password):
+        connection = dpabi2.connect(
+        host = 'localhost', 
+        user='root',
+        passwd='12345',
+        database = "websitedb"
+        )    
+        oldusername = session["username"]
+        mycursor = connection.cursor()
+        sql = """
+        UPDATE Teacher SET Name = %s
+        WHERE T_username = %s
+        """
+        mycursor.execute(sql,(name,oldusername,))
+        connection.commit()
+        mycursor.close()
+        session["Name"] = name
+        mycursor = connection.cursor()
+        sql = """
+        UPDATE Teacher SET Surname = %s
+        WHERE T_username = %s
+        """
+        mycursor.execute(sql,(surname,oldusername,))
+        connection.commit()
+        mycursor.close()
+        session["Surname"] = surname
+        mycursor = connection.cursor()
+        sql = """
+        UPDATE Teacher SET age = %s
+        WHERE T_username = %s
+        """
+        mycursor.execute(sql,(age,oldusername,))
+        connection.commit()
+        mycursor.close()
+        session["Age"] = age
+        mycursor = connection.cursor()
+        sql = """
+        UPDATE Teacher SET Lesson_type = %s
+        WHERE T_username = %s
+        """
+        mycursor.execute(sql,(lesson_type,oldusername,))
+        connection.commit()
+        mycursor.close()
+        session["Lesson_type"] = lesson_type
+        mycursor = connection.cursor()
+        sql = """
+        UPDATE Teacher SET Password = %s
+        WHERE T_username = %s
+        """
+        mycursor.execute(sql,(password,oldusername,))
+        connection.commit()
+        mycursor.close()
+        connection.close()
+
+    def changecomment(self,S_username,text,rating,T_username):
+        connection = dpabi2.connect(
+        host = 'localhost', 
+        user='root',
+        passwd='12345',
+        database = "websitedb"
+        )   
+        mycursor = connection.cursor()
+        sql = """
+        UPDATE Commentt SET Comment_text = %s
+        WHERE (T_username = %s AND S_username = %s)
+        """
+        mycursor.execute(sql,(text,T_username,S_username,))
+        connection.commit()
+        mycursor.close()
+        mycursor = connection.cursor()
+        sql = """
+        UPDATE Commentt SET rating = %s
+        WHERE (T_username = %s AND S_username = %s)
+        """
+        mycursor.execute(sql,(rating,T_username,S_username,))
+        connection.commit()
+        mycursor.close()
+
+
